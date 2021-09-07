@@ -33,10 +33,6 @@ RUN bash ./configure  --with-extra-cxxflags="-Wno-error" --with-extra-cflags="-W
 
 RUN make all
 
-
-RUN apt-get purge -y build-essential mercurial
-RUN apt-get purge -y $(cat /var/openjdk_build_deps.txt | tr '\n' ' ')
-
 RUN apt-get --purge -y autoremove \
     && apt-get autoclean \
     && apt-get clean \
