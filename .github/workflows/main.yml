@@ -20,6 +20,11 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
+        id: extract_branch
+
       - name: Log in to Docker Hub
         # Uses v1.10.0, sha1 is used for better security
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -33,4 +38,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: intera/openjdk-jdk8u-build:8u282-ga-centos-7
+          tags: intera/openjdk-jdk8u-build:${{ steps.extract_branch.outputs.branch }}

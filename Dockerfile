@@ -1,16 +1,23 @@
-FROM centos:7
+FROM ubuntu:20.04
 
-ARG OPENJDK_BUILD_TAG="jdk8u282-ga"
+ENV DEBIAN_FRONTEND noninteractive
+ENV LANG C.UTF-8
 
-RUN yum install -y java-1.8.0-openjdk-devel
+ARG OPENJDK_BUILD_TAG="jdk8u302-ga"
 
-RUN yum-builddep -y java-1.8.0-openjdk-devel
+RUN sed -i -E "s/^# deb-src (.+)/deb-src \1/g" /etc/apt/sources.list
 
-RUN yum groupinstall -y 'Development Tools'
+RUN apt-get update && apt-get -y dist-upgrade
+
+RUN apt-get install -y build-essential
+
+RUN apt-get build-dep -y openjdk-8-jre --dry-run | grep "Inst" | cut -d " " -f2 > /var/openjdk_build_deps.txt
+
+RUN apt-get build-dep -y openjdk-8-jre
 
 COPY mercurial.repo /etc/yum.repos.d/mercurial.repo
 
-RUN yum install -y mercurial which
+RUN apt-get install -y mercurial
 
 WORKDIR /opt
 
@@ -25,3 +32,12 @@ RUN bash get_source.sh
 RUN bash ./configure  --with-extra-cxxflags="-Wno-error" --with-extra-cflags="-Wno-error"
 
 RUN make all
+
+
+RUN apt-get purge -y build-essential mercurial
+RUN apt-get purge -y $(cat /var/openjdk_build_deps.txt | tr '\n' ' ')
+
+RUN apt-get --purge -y autoremove \
+    && apt-get autoclean \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
