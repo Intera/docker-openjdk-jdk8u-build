@@ -15,8 +15,6 @@ RUN apt-get build-dep -y openjdk-8-jre --dry-run | grep "Inst" | cut -d " " -f2 
 
 RUN apt-get build-dep -y openjdk-8-jre
 
-COPY mercurial.repo /etc/yum.repos.d/mercurial.repo
-
 RUN apt-get install -y mercurial
 
 WORKDIR /opt
