@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
 ENV LANG C.UTF-8
 
-ARG OPENJDK_BUILD_TAG="jdk8u302-ga"
+ARG OPENJDK_BUILD_TAG="jdk8u312-ga"
 
 RUN sed -i -E "s/^# deb-src (.+)/deb-src \1/g" /etc/apt/sources.list
 
