@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG OPENJDK_BUILD_TAG="jdk8u302-ga"
+ARG OPENJDK_BUILD_TAG="jdk8u312-ga"
 
 RUN yum install -y java-1.8.0-openjdk-devel
 
